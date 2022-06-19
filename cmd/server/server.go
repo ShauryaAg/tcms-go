@@ -1,39 +1,22 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/ShauryaAg/tcms-go/internal/db"
+	_ "github.com/ShauryaAg/tcms-go/internal/db/mongo"
+	"github.com/ShauryaAg/tcms-go/internal/service"
 	"github.com/go-chi/chi"
 	"github.com/rs/cors"
-
-	"github.com/ShauryaAg/tcms-go/internal/db"
-	"github.com/ShauryaAg/tcms-go/internal/db/mongo"
-	httptransport "github.com/ShauryaAg/tcms-go/internal/http"
 )
 
 func main() {
 
-	ctx := context.Background()
-
-	store := db.MongoStore{}
-	client, err := store.Connect(ctx)
-	defer client.Disconnect(ctx)
-	if err != nil {
-		log.Fatal("err", err)
-	}
-
-	repo := mongo.NewMongoTestCaseRepository(client.Database("tcms"))
-	handler := httptransport.TestCaseHandler{
-		Repository: *repo,
-	}
-
-	r := chi.NewRouter()
-	r.Route("/api", func(r chi.Router) {
-		r.Post("/testcase", handler.CreateTestCase)
+	router := chi.NewRouter()
+	router.Route("/api", func(r chi.Router) {
+		service.NewTestCaseService(db.DbStore, r, db.Repositories["test_cases"])
 	})
 
 	c := cors.New(cors.Options{
@@ -49,9 +32,9 @@ func main() {
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  120 * time.Second,
-		Handler:      c.Handler(r),
+		Handler:      c.Handler(router),
 	}
 
-	fmt.Printf("Starting Server....")
+	log.Println("Starting Server....")
 	log.Fatal(srv.ListenAndServe())
 }
