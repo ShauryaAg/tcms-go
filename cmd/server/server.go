@@ -28,7 +28,7 @@ func main() {
 
 	repo := mongo.NewMongoTestCaseRepository(client.Database("tcms"))
 	handler := httptransport.TestCaseHandler{
-		Store: *repo,
+		Repository: *repo,
 	}
 
 	r := chi.NewRouter()

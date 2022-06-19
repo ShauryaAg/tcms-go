@@ -9,7 +9,7 @@ import (
 )
 
 type TestCaseHandler struct {
-	Store interfaces.Repository
+	Repository interfaces.Repository
 }
 
 func (h *TestCaseHandler) CreateTestCase(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +29,7 @@ func (h *TestCaseHandler) CreateTestCase(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	testcase, err := h.Store.Create(r.Context(), data)
+	testcase, err := h.Repository.Create(r.Context(), data)
 	if err != nil {
 		w.Header().Add("content-type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
