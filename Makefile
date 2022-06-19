@@ -11,5 +11,4 @@ run:
 	./${BUILD_DIR}/main
 
 .PHONY: all
-all: 
-	build run
+all: build run
