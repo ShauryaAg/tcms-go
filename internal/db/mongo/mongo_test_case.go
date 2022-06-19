@@ -4,7 +4,8 @@ import (
 	"context"
 	"errors"
 
-	models "github.com/ShauryaAg/tcms-go/internal/models/mongo"
+	models "github.com/ShauryaAg/tcms-go/internal/models"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -24,27 +25,28 @@ type MongoTestCaseRepository struct {
 func (m MongoTestCaseRepository) FindById(ctx context.Context, objectId interface{}) (interface{}, error) {
 	id, ok := objectId.(primitive.ObjectID)
 	if !ok {
-		return models.MongoTestCase{}, errors.New("objectId must be a primitive.ObjectID")
+		return models.TestCase[primitive.ObjectID]{}, errors.New("objectId must be a primitive.ObjectID")
 	}
 
-	return FindById[models.MongoTestCase](ctx, m.Collection, id)
+	return FindById[models.TestCase[primitive.ObjectID]](ctx, m.Collection, id)
 }
 
 func (m MongoTestCaseRepository) Find(ctx context.Context, filter interface{}) (interface{}, error) {
-	return Find[models.MongoTestCase](ctx, m.Collection, filter)
+	return Find[models.TestCase[primitive.ObjectID]](ctx, m.Collection, filter)
 }
 
 func (m MongoTestCaseRepository) FindOne(ctx context.Context, filter interface{}) (interface{}, error) {
-	return FindOne[models.MongoTestCase](ctx, m.Collection, filter)
+	return FindOne[models.TestCase[primitive.ObjectID]](ctx, m.Collection, filter)
 }
 
 func (m MongoTestCaseRepository) Create(ctx context.Context, data interface{}) (interface{}, error) {
 	ma, ok := data.(map[string]interface{})
 	if !ok {
-		return models.MongoTestCase{}, errors.New("data must be a map[string]interface{}")
+		return models.TestCase[primitive.ObjectID]{}, errors.New("data must be a map[string]interface{}")
 	}
 
-	model := models.NewMongoTestCase(
+	model := models.NewTestCase(
+		primitive.NewObjectID(),
 		ma["name"].(string),
 		ma["priority"].(string),
 		ma["testType"].(string),
@@ -52,13 +54,13 @@ func (m MongoTestCaseRepository) Create(ctx context.Context, data interface{}) (
 		ma["editedBy"].(string),
 	)
 
-	return Create[models.MongoTestCase](ctx, m.Collection, *model)
+	return Create[models.TestCase[primitive.ObjectID]](ctx, m.Collection, *model)
 }
 
 func (m MongoTestCaseRepository) Update(ctx context.Context, filter interface{}, data interface{}) error {
-	return Update[models.MongoTestCase](ctx, m.Collection, filter, data)
+	return Update[models.TestCase[primitive.ObjectID]](ctx, m.Collection, filter, data)
 }
 
 func (m MongoTestCaseRepository) Delete(ctx context.Context, filter interface{}) error {
-	return Delete[models.MongoTestCase](ctx, m.Collection, filter)
+	return Delete[models.TestCase[primitive.ObjectID]](ctx, m.Collection, filter)
 }
