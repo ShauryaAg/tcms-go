@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	utils "github.com/ShauryaAg/tcms-go/pkg/http"
 	"github.com/ShauryaAg/tcms-go/pkg/repository/interfaces"
 )
 
@@ -16,31 +17,26 @@ func (h *TestCaseHandler) CreateTestCase(w http.ResponseWriter, r *http.Request)
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		w.Header().Add("content-type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
+		utils.Error(w, r, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	var data map[string]interface{}
 	err = json.Unmarshal(bodyBytes, &data)
 	if err != nil {
-		w.Header().Add("content-type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
+		utils.Error(w, r, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	testcase, err := h.Repository.Create(r.Context(), data)
 	if err != nil {
-		w.Header().Add("content-type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		utils.Error(w, r, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	jsonBytes, err := json.Marshal(testcase)
 	if err != nil {
-		w.Header().Add("content-type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
+		utils.Error(w, r, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
