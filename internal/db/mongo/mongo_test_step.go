@@ -25,9 +25,9 @@ type MongoTestStepRepository struct {
 }
 
 func (m MongoTestStepRepository) FindById(ctx context.Context, objectId interface{}) (interface{}, error) {
-	id, ok := objectId.(primitive.ObjectID)
-	if !ok {
-		return MongoTestStep{}, errors.New("objectId must be a primitive.ObjectID")
+	id, err := primitive.ObjectIDFromHex(objectId.(string))
+	if err != nil {
+		return MongoTestStep{}, err
 	}
 
 	return FindById[MongoTestStep](ctx, m.Collection, id)

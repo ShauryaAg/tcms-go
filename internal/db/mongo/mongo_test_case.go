@@ -25,9 +25,9 @@ type MongoTestCaseRepository struct {
 }
 
 func (m MongoTestCaseRepository) FindById(ctx context.Context, objectId interface{}) (interface{}, error) {
-	id, ok := objectId.(primitive.ObjectID)
-	if !ok {
-		return MongoTestCase{}, errors.New("objectId must be a primitive.ObjectID")
+	id, err := primitive.ObjectIDFromHex(objectId.(string))
+	if err != nil {
+		return MongoTestCase{}, err
 	}
 
 	return FindById[MongoTestCase](ctx, m.Collection, id)
