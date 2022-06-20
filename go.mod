@@ -3,12 +3,12 @@ module github.com/ShauryaAg/tcms-go
 go 1.18
 
 require (
+	github.com/go-chi/chi v1.5.4
 	github.com/rs/cors v1.8.2
 	go.mongodb.org/mongo-driver v1.9.1
 )
 
 require (
-	github.com/go-chi/chi v1.5.4 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/klauspost/compress v1.15.6 // indirect
