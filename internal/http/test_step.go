@@ -6,11 +6,13 @@ import (
 	"net/http"
 
 	utils "github.com/ShauryaAg/tcms-go/pkg/http"
-	"github.com/ShauryaAg/tcms-go/pkg/repository/interfaces"
+	httpinterfaces "github.com/ShauryaAg/tcms-go/pkg/http/interfaces"
+	repointerfaces "github.com/ShauryaAg/tcms-go/pkg/repository/interfaces"
 )
 
 type TestStepHandler struct {
-	Repository interfaces.Repository
+	Router     httpinterfaces.Router
+	Repository repointerfaces.Repository
 }
 
 func (h *TestStepHandler) CreateTestStep(w http.ResponseWriter, r *http.Request) {

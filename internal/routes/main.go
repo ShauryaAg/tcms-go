@@ -3,14 +3,19 @@ package routes
 import (
 	"net/http"
 
+	"github.com/go-chi/chi/middleware"
+
+	httpinterfaces "github.com/ShauryaAg/tcms-go/pkg/http/interfaces"
 	"github.com/ShauryaAg/tcms-go/pkg/repository/interfaces"
-	"github.com/go-chi/chi"
 )
 
 func NewRouter(repositories map[string]interfaces.Repository) http.Handler {
-	router := chi.NewRouter()
+	router := NewChiRouter()
 
-	router.Route("/api/v1", func(r chi.Router) {
+	router.Use(middleware.RequestID)
+	router.Use(middleware.Logger)
+
+	router.Route("/api/v1", func(r httpinterfaces.Router) {
 		r.Mount("/testcase", testCaseRouter(repositories["test_cases"]))
 		r.Mount("/teststep", testStepRouter(repositories["test_steps"]))
 	})
