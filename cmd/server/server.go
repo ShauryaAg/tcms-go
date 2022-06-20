@@ -7,18 +7,13 @@ import (
 
 	"github.com/ShauryaAg/tcms-go/internal/db"
 	_ "github.com/ShauryaAg/tcms-go/internal/db/mongo"
-	"github.com/ShauryaAg/tcms-go/internal/service"
-	"github.com/go-chi/chi"
+	"github.com/ShauryaAg/tcms-go/internal/routes"
 	"github.com/rs/cors"
 )
 
 func main() {
 
-	router := chi.NewRouter()
-	router.Route("/api", func(r chi.Router) {
-		service.NewTestCaseService(db.DbStore, r, db.Repositories["test_cases"])
-		service.NewTestStepService(db.DbStore, r, db.Repositories["test_steps"])
-	})
+	router := routes.NewRouter(db.Repositories)
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
