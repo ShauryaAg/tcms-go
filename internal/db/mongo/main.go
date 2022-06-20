@@ -14,4 +14,5 @@ func init() {
 
 	db.DbStore = store
 	db.Repositories["test_cases"] = NewMongoTestCaseRepository(database)
+	db.Repositories["test_steps"] = NewMongoTestStepRepository(database)
 }

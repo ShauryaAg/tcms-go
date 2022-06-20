@@ -17,6 +17,7 @@ func main() {
 	router := chi.NewRouter()
 	router.Route("/api", func(r chi.Router) {
 		service.NewTestCaseService(db.DbStore, r, db.Repositories["test_cases"])
+		service.NewTestStepService(db.DbStore, r, db.Repositories["test_steps"])
 	})
 
 	c := cors.New(cors.Options{
