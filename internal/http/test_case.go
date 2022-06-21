@@ -6,13 +6,10 @@ import (
 	"net/http"
 
 	utils "github.com/ShauryaAg/tcms-go/pkg/http"
-	httpinterfaces "github.com/ShauryaAg/tcms-go/pkg/http/interfaces"
-	repointerfaces "github.com/ShauryaAg/tcms-go/pkg/repository/interfaces"
 )
 
 type TestCaseHandler struct {
-	Router     httpinterfaces.Router
-	Repository repointerfaces.Repository
+	Handler
 }
 
 func (h *TestCaseHandler) CreateTestCase(w http.ResponseWriter, r *http.Request) {

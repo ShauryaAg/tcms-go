@@ -11,8 +11,10 @@ import (
 func testCaseRouter(repository interfaces.Repository) http.Handler {
 	mux := NewChiRouter()
 	handler := httptransport.TestCaseHandler{
-		Router:     mux,
-		Repository: repository,
+		Handler: httptransport.Handler {
+			Router:     mux,
+			Repository: repository,
+		},
 	}
 
 	mux.Route("/", func(r httpinterfaces.Router) {
