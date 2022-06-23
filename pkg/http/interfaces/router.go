@@ -3,15 +3,11 @@ package interfaces
 import "net/http"
 
 type Router interface {
+	// ServeHTTP serves the HTTP request.
+	ServeHTTP(w http.ResponseWriter, r *http.Request)
+
 	// Use appends one or more middlewares onto the Router stack.
 	Use(middlewares ...func(http.Handler) http.Handler)
-
-	// With adds inline middlewares for an endpoint handler.
-	With(middlewares ...func(http.Handler) http.Handler) Router
-
-	// Group adds a new inline-Router along the current routing
-	// path, with a fresh middleware stack for the inline-Router.
-	Group(fn func(r Router)) Router
 
 	// Route mounts a sub-Router along a `pattern`` string.
 	Route(pattern string, fn func(r Router)) Router
